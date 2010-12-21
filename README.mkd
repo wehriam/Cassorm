@@ -4,9 +4,7 @@ Cassorm
 
 Cassorm (Cassandra ORM) is an object-relational mapping built on top of the 
 [Pycassa client library](https://github.com/pycassa/pycassa/) and designed for 
-use with Django and Apache Cassandra.
-
-Features:
+use with Django and Apache Cassandra. It features:
 
 * Automatic schema generation/installation
 * Secondary index support
