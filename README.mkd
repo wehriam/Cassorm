@@ -43,7 +43,8 @@ Cassorm offers three main data types. The first is a model based on [Pycassa's C
         f = cassorm.IntString()
         g = cassorm.String()
 
-To create the schema, use the "sync" command.
+To create the schema, use the "sync" command. This only needs to be done 
+once per column family.
 
     TestModel.sync()
 
@@ -59,8 +60,14 @@ Basic Usage, Lists
 
     class TestList(CassandraList): # Column Family will be 'testlist'
         pass
+
+To create the schema, use the "sync" command. This only needs to be done 
+once per column family.
     
     TestList.sync()
+
+Instantiate the list to use it:
+
     sample = TestList("SampleKey")
     sample.append("a")
     sample.append("b")
@@ -73,8 +80,14 @@ Basic Usage, Dictionaries
 
     class TestDict(CassandraDict): # Column Family will be 'testdict'
         pass
+
+To create the schema, use the "sync" command. This only needs to be done 
+once per column family.
     
-    TestDict.sync(destructive=True)
+    TestDict.sync()
+
+Instantiate the dictionary to use it:
+
     sample = TestDict("SampleKey")
     sample['a'] = 'Alice'
     sample['b'] = 'Bob'
