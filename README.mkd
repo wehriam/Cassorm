@@ -29,7 +29,7 @@ Add the following lines to your settings.py file:
 Basic Usage, Models
 -------------------
 
-Cassorm offers three main data types. The first is a model based on Pycassa's ColumnFamilyMap:
+Cassorm offers three main data types. The first is a model based on [http://pycassa.github.com/pycassa/api/pycassa/columnfamilymap.html](Pycassa's ColumnFamilyMap):
 
     class TestModel(cassorm.CassandraModel): # Column Family will be 'testmodel'
         a = cassorm.DateTime()
@@ -50,9 +50,6 @@ Instantiate the model to use it:
     test.a = datetime.now()
     test.save()
     TestModel.objects[test.key].a # Returns a datetime object.
-
-The CassandraModel.objects interface fully implements [http://pycassa.github.com/pycassa/api/pycassa/columnfamilymap.html](Pycassa's ColumnFamilyMap).
-
 
 Basic Usage, Lists
 ------------------
