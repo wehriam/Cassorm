@@ -1,0 +1,61 @@
+from django.utils import unittest
+from ..list import CassandraList
+
+class TestList(CassandraList):
+    pass
+    
+class CassandraListTest(unittest.TestCase):
+
+    def setUp(self):
+        TestList.sync(destructive=True)
+        self.seq = TestList("Test")
+
+    def tearDown(self):
+        self.seq.delete()
+
+    def test_append(self):
+        self.seq.append("a")
+        self.seq.append("b")
+        self.assertEqual(len(self.seq), 2)
+        self.assertNotEqual(len(self.seq), 9)
+        self.assertEqual(self.seq.pop(), "b")
+        self.assertEqual(self.seq.pop(), "a")
+        self.assertEqual(len(self.seq), 0)
+        self.seq.append("c")
+        self.assertEqual(self.seq.pop(), "c")
+        
+    def test_extend(self):
+        self.seq.extend(["a", "b", "c"])
+        self.assertEqual(len(self.seq), 3)
+        self.assertEqual(self.seq.pop(), "c")
+        self.seq.extend(["d", "e", "f"])
+        self.assertEqual(len(self.seq), 5)
+        self.assertEqual(self.seq.pop(), "f")
+        
+    def test_insert(self):
+        self.seq.insert(0, "a")
+        self.seq.insert(0, "b")
+        self.seq.insert(2, "c")
+        self.assertEqual(len(self.seq), 3)
+        self.assertEqual(self.seq.pop(), "c")
+        self.assertEqual(self.seq.pop(), "a") 
+        self.assertEqual(self.seq.pop(), "b")        
+        self.assertEqual(len(self.seq), 0)
+        
+    def test_remove(self):
+        self.seq.extend(["a", "b", "c"])
+        self.seq.remove("b")
+        self.assertEqual(len(self.seq), 2)
+        self.assertEqual(self.seq.pop(), "c")
+        self.assertEqual(self.seq.pop(), "a")
+    
+    def test_delete(self):
+        self.seq.delete()
+    
+    def test_get(self):
+        self.seq.append("a")
+        self.seq.append("b")
+        self.assertEqual(self.seq[0], "a")
+        self.assertEqual(self.seq[1], "b")
+
+
