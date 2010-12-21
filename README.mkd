@@ -12,7 +12,7 @@ Installation
 
 If easy_install is available, you can use:
 
-    easy_install cassorm
+    easy_install https://github.com/wehriam/Cassorm/tarball/develop
 
 
 Connecting
