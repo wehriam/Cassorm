@@ -1,0 +1,85 @@
+
+Cassorm
+=======
+
+Cassorm (Cassandra ORM) is an Object-relational mapping built on top of the 
+pycassa client library - https://github.com/pycassa/pycassa/ - design for use
+with Django and Apache Cassandra.
+
+
+Installation
+------------
+
+If easy_install is available, you can use:
+
+    easy_install cassorm
+
+
+Connecting
+----------
+
+Add the following lines to your settings.py file:
+
+>>> import pycassa
+>>> CASSANDRA_SERVERS = ["127.0.0.1:9160"]
+>>> CASSANDRA_KEYSPACE = "SampleKeyspace"
+>>> CASSANDRA_POOL = pycassa.connect(CASSANDRA_KEYSPACE, CASSANDRA_SERVERS)
+
+
+Basic Usage, Models
+-------------------
+
+Cassorm offers three main data types. The first is a model based on Pycassa's ColumnFamilyMap:
+
+>>> class TestModel(cassorm.CassandraModel): # Column Family will be 'testmodel'
+>>>     a = cassorm.DateTime()
+>>>     b = cassorm.DateTimeString()
+>>>     c = cassorm.Float64()
+>>>     d = cassorm.FloatString()
+>>>     e = cassorm.Int64()
+>>>     f = cassorm.IntString()
+>>>     g = cassorm.String()
+
+To create the schema, use the "sync" command.
+
+>>> TestModel.sync()
+
+Instantiate the model to use it:
+
+>>> test = TestModel()
+>>> test.a = datetime.now()
+>>> test.save()
+>>> TestModel.objects[test.key].a # Returns a datetime object.
+
+The CassandraModel.objects interface fully implements Pycassa's ColumnFamilyMap:
+http://pycassa.github.com/pycassa/api/pycassa/columnfamilymap.html
+
+Basic Usage, Lists
+------------------
+
+>>> class TestList(CassandraList): # Column Family will be 'testlist'
+>>>     pass
+>>> 
+>>> TestList.sync()
+>>> seq = TestList("SampleKey")
+>>> seq.append("a")
+>>> seq.append("b")
+>>> len(seq) # 2
+>>> seq[0] # 'a'
+>>> seq.pop() # 'b'
+
+Basic Usage, Dictionaries
+-------------------------
+
+>>> class TestDict(CassandraDict): # Column Family will be 'testdict'
+>>>     pass
+>>> 
+>>> TestDict.sync(destructive=True)
+>>> d = TestDict("SampleKey")
+>>> d['a'] = 'Alice'
+>>> d['b'] = 'Bob'
+>>> d.keys() # ['a', 'b']
+>>> d.values() # ['Alice', 'Bob']
+>>> del d['a']
+>>> d.keys() # ['b']
+>>> 'b' in d # True
