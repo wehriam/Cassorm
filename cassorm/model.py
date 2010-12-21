@@ -3,9 +3,8 @@ from django.conf import settings
 import pycassa
 from pycassa.util import convert_time_to_uuid
 from pycassa.system_manager import SystemManager
-from .exceptions import CassandraIndexError
-from .types import DateTime, DateTimeString, Float64, FloatString, Int64, IntString, String
 from pycassa import BYTES_TYPE, LONG_TYPE, INT_TYPE, ASCII_TYPE, UTF8_TYPE, TIME_UUID_TYPE, LEXICAL_UUID_TYPE
+from .types import DateTime, DateTimeString, Float64, FloatString, Int64, IntString, String
 
 
 MANAGER_MAPS = {}

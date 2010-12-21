@@ -4,7 +4,6 @@ from django.conf import settings
 import pycassa
 from pycassa.util import convert_time_to_uuid, convert_uuid_to_time
 from pycassa.system_manager import SystemManager
-from .exceptions import CassandraIndexError
 
 MANAGER_MAPS = {}
 

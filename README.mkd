@@ -2,10 +2,15 @@
 Cassorm
 =======
 
-Cassorm (Cassandra ORM) is an Object-relational mapping built on top of the 
-[pycassa client library](https://github.com/pycassa/pycassa/) designed for use
-with Django and Apache Cassandra.
+Cassorm (Cassandra ORM) is an object-relational mapping built on top of the 
+[Pycassa client library](https://github.com/pycassa/pycassa/) and designed for 
+use with Django and Apache Cassandra.
 
+Features:
+
+* Automatic schema generation/installation
+* Secondary index support
+* Model, List, and Dictionary types
 
 Installation
 ------------
@@ -18,7 +23,7 @@ If easy_install is available, you can use:
 Connecting
 ----------
 
-Add the following lines to your settings.py file:
+Add the following lines to your Django settings.py file:
 
     import pycassa
     CASSANDRA_SERVERS = ["127.0.0.1:9160"]
@@ -58,12 +63,12 @@ Basic Usage, Lists
         pass
     
     TestList.sync()
-    seq = TestList("SampleKey")
-    seq.append("a")
-    seq.append("b")
-    len(seq) # 2
-    seq[0] # 'a'
-    seq.pop() # 'b'
+    sample = TestList("SampleKey")
+    sample.append("a")
+    sample.append("b")
+    len(sample) # 2
+    sample[0] # 'a'
+    sample.pop() # 'b'
 
 Basic Usage, Dictionaries
 -------------------------
@@ -72,11 +77,20 @@ Basic Usage, Dictionaries
         pass
     
     TestDict.sync(destructive=True)
-    d = TestDict("SampleKey")
-    d['a'] = 'Alice'
-    d['b'] = 'Bob'
-    d.keys() # ['a', 'b']
-    d.values() # ['Alice', 'Bob']
-    del d['a']
-    d.keys() # ['b']
-    'b' in d # True
+    sample = TestDict("SampleKey")
+    sample['a'] = 'Alice'
+    sample['b'] = 'Bob'
+    sample.keys() # ['a', 'b']
+    sample.values() # ['Alice', 'Bob']
+    del sample['a']
+    sample.keys() # ['b']
+    'b' in sample # True
+
+Tests
+-----
+
+Add the following lines to your app's tests.py file:
+
+    from cassorm import CassandraListTest
+    from cassorm import CassandraModelTest
+    from cassorm import CassandraDict
