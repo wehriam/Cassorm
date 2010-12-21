@@ -3,7 +3,7 @@ Cassorm
 =======
 
 Cassorm (Cassandra ORM) is an Object-relational mapping built on top of the 
-[https://github.com/pycassa/pycassa/](pycassa client library) designed for use
+[pycassa client library](https://github.com/pycassa/pycassa/) designed for use
 with Django and Apache Cassandra.
 
 
@@ -29,7 +29,7 @@ Add the following lines to your settings.py file:
 Basic Usage, Models
 -------------------
 
-Cassorm offers three main data types. The first is a model based on [http://pycassa.github.com/pycassa/api/pycassa/columnfamilymap.html](Pycassa's ColumnFamilyMap):
+Cassorm offers three main data types. The first is a model based on [Pycassa's ColumnFamilyMap](http://pycassa.github.com/pycassa/api/pycassa/columnfamilymap.html):
 
     class TestModel(cassorm.CassandraModel): # Column Family will be 'testmodel'
         a = cassorm.DateTime()
