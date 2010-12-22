@@ -75,14 +75,20 @@ class CassandraDict(object):
             raise CassandraKeyError(key)
             
     def __setitem__(self, key, value):
-        return self.cf.insert(self.row_key, {key:value})
+        self.cf.insert(self.row_key, {key:value})
 
     def __delitem__(self, key):
-        return self.cf.remove(self.row_key, columns=[key])
+        self.cf.remove(self.row_key, columns=[key])
 
     def update(self, d):
         return self.cf.insert(self.row_key, d)
 
+    def remove(self, seq):
+        if isinstance(seq, list):
+            self.cf.remove(self.row_key, columns=seq)
+        elif isinstance(seq, dict):
+            self.cf.remove(self.row_key, columns=seq.keys())
+            
     def keys(self):
         try:
             return self.cf.get(self.row_key).keys()
@@ -118,6 +124,8 @@ class CassandraDict(object):
 
     def __len__(self):
         return self.cf.get_count(self.row_key)
+    
+    def __dict__(self):
+        return dict(self.items())
         
-    def __del__(self):
-        self.cf.remove(self.row_key)
+        

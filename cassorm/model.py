@@ -104,7 +104,10 @@ class CassandraModelManager(pycassa.ColumnFamilyMap):
                     self.cls.__name__.lower()))
         except:
             pass
-        
+    
+    def all(self):
+        return self.get_range()
+    
     def __getitem__(self, key):
         return self.get(key)
 
