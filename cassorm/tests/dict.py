@@ -12,7 +12,7 @@ class CassandraDictTest(unittest.TestCase):
     
     def setUp(self):
         TestDict.sync(destructive=True)
-        self.d = TestDict("Test")
+        self.d = TestDict("Test") 
 
     def test_get(self):
         key_1 = "".join(random_utf8_seq() for i in range(10))

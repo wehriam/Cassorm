@@ -4,6 +4,7 @@ from django.conf import settings
 import pycassa
 from pycassa.util import convert_time_to_uuid, convert_uuid_to_time
 from pycassa.system_manager import SystemManager
+from .pool import CASSANDRA_POOL
 
 MANAGER_MAPS = {}
 
@@ -16,7 +17,7 @@ class CassandraListManager(pycassa.ColumnFamily):
     def __init__(self, cls):
         self.cls = cls    
         super(CassandraListManager, self).__init__(
-            settings.CASSANDRA_POOL, 
+            CASSANDRA_POOL, 
             self.cls.__name__.lower())
 
 
@@ -119,6 +120,25 @@ class CassandraList(object):
             
     def delete(self):
         self.cf.remove(self.row_key)
+    
+    def remove_older_than(self, x):
+        column_start = convert_time_to_uuid(x)
+        while 1:
+            try:
+                columns = self.cf.get(self.row_key, column_start=column_start, column_count=100, column_reversed=True)
+            except pycassa.NotFoundException, e:
+                return
+            keys = columns.keys()
+            self.cf.remove(self.row_key, columns=keys)
+            key = uuid.UUID("{%s}" % keys[0])
+            column_start = uuid.UUID(int=key.int + 1)
+    
+    def __iter__(self):
+        try:
+            row = self.cf.get(self.row_key)
+        except pycassa.NotFoundException, e:
+            return iter([])
+        return iter(row.values())
     
     def __len__(self):
         return self.cf.get_count(self.row_key)

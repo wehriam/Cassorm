@@ -5,6 +5,7 @@ from pycassa.util import convert_time_to_uuid
 from pycassa.system_manager import SystemManager
 from pycassa import BYTES_TYPE, LONG_TYPE, INT_TYPE, ASCII_TYPE, UTF8_TYPE, TIME_UUID_TYPE, LEXICAL_UUID_TYPE
 from .types import DateTime, DateTimeString, Float64, FloatString, Int64, IntString, String
+from .pool import CASSANDRA_POOL
 
 
 MANAGER_MAPS = {}
@@ -96,18 +97,23 @@ class CassandraModelManager(pycassa.ColumnFamilyMap):
     
     def __init__(self, cls, create=False):
         self.cls = cls
-        try:
-            super(CassandraModelManager, self).__init__(
-                self.cls, 
-                pycassa.ColumnFamily(
-                    settings.CASSANDRA_POOL, 
-                    self.cls.__name__.lower()))
-        except:
-            pass
-    
+        name = self.cls.__name__.lower()
+        super(CassandraModelManager, self).__init__(
+            self.cls, 
+            pycassa.ColumnFamily(
+                CASSANDRA_POOL, 
+                name))
+        self.cf = pycassa.ColumnFamily(
+                CASSANDRA_POOL, 
+                name)
+        
     def all(self):
         return self.get_range()
     
+    def difference(self, keys):
+        existing = self.cf.multiget(keys)
+        return list(set(keys) - set(existing.keys()))
+        
     def __getitem__(self, key):
         return self.get(key)
 

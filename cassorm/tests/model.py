@@ -110,3 +110,15 @@ class CassandraModelTest(unittest.TestCase):
         self.assertEqual(tm_2.e, value_e)
         self.assertEqual(tm_2.f, value_f)
         self.assertEqual(tm_2.g, value_g)        
+
+    def test_difference(self):
+        value = "".join(random_utf8_seq() for i in range(10))
+        tm_1 = TestModel(a=datetime.now())
+        tm_1.save()
+        tm_2 = TestModel(a=datetime.now())
+        tm_2.save()
+        seq = [tm_1.key, tm_2.key, value]
+        difference = TestModel.objects.difference(seq)
+        self.assertEqual(len(difference), 1)
+        self.assertEqual(difference.pop(), value) 
+        

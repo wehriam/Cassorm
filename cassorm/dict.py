@@ -1,6 +1,7 @@
 from django.conf import settings
 import pycassa
 from pycassa.system_manager import SystemManager
+from .pool import CASSANDRA_POOL
 
 
 MANAGER_MAPS = {}
@@ -16,7 +17,7 @@ class CassandraDictManager(pycassa.ColumnFamily):
     def __init__(self, cls):
         self.cls = cls    
         super(CassandraDictManager, self).__init__(
-            settings.CASSANDRA_POOL, 
+            CASSANDRA_POOL, 
             self.cls.__name__.lower())
 
 
@@ -46,7 +47,6 @@ class CassandraMetaDict(type):
             comparator_type=pycassa.UTF8_TYPE,
             default_validation_class=default_validation_class)
         sys.close()
-
 
 class CassandraDict(object):
     "A dictionary that stores its data persistantly in Cassandra"
@@ -125,7 +125,5 @@ class CassandraDict(object):
     def __len__(self):
         return self.cf.get_count(self.row_key)
     
-    def __dict__(self):
-        return dict(self.items())
         
         

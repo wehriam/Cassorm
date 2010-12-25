@@ -1,5 +1,6 @@
 from django.utils import unittest
 from ..list import CassandraList
+import time
 
 class TestList(CassandraList):
     pass
@@ -13,6 +14,24 @@ class CassandraListTest(unittest.TestCase):
     def tearDown(self):
         self.seq.delete()
 
+    def test_list(self):
+        seq = list(self.seq)
+        self.assertEqual(len(seq), 0)
+        self.seq.append("a")
+        self.seq.append("b")
+        seq = list(self.seq)
+        self.assertEqual(len(seq), 2)
+        self.assertEqual(seq.pop(), "b")
+        self.assertEqual(seq.pop(), "a")
+        
+    def test_remove_older_than(self):
+        self.seq.append("a")
+        time.sleep(5)
+        self.seq.append("b")
+        self.seq.remove_older_than(time.time() - 2)
+        self.assertEqual(len(self.seq), 1)
+        self.assertEqual(self.seq.pop(), "b")
+        
     def test_append(self):
         self.seq.append("a")
         self.seq.append("b")

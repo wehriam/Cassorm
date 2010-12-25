@@ -8,7 +8,6 @@ def _pycassa_type_init(self, *args, **kwargs):
     else:
         self.index = False
     super(self.__class__, self).__init__(*args, **kwargs)     
-    
 
 class DateTime(pycassa.DateTime):
     __init__ = _pycassa_type_init
